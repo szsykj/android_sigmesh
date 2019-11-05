@@ -15,6 +15,7 @@ import com.telink.sig.mesh.util.AuthValueManager;
 import com.telink.sig.mesh.util.TelinkLog;
 
 import java.io.File;
+import java.io.FileOutputStream;
 
 /**
  * @program: TelinkSigMeshRelease
@@ -46,7 +47,7 @@ public class MeshManager {
 
 
     public static final String FILE_NAME = "telink.flash";
-
+    public static final int DATA_LEN = 1024*1024;
     public void init(Context context){
         mApplication = (Application) context.getApplicationContext();
         mEventBus = new EventBus<>();
@@ -58,6 +59,26 @@ public class MeshManager {
                     targetFile.delete();
                     TelinkLog.w("mesh flash delete");
                 }
+
+                targetFile.createNewFile();
+                byte[] flashData = new byte[DATA_LEN];
+                for (int i = 0; i < flashData.length; i++) {
+                    flashData[i] = (byte) 0xFF;
+                }
+                FileOutputStream fos = new FileOutputStream(targetFile);
+                fos.write(flashData);
+                fos.flush();
+                fos.close();
+            }else {
+                targetFile.createNewFile();
+                byte[] flashData = new byte[DATA_LEN];
+                for (int i = 0; i < flashData.length; i++) {
+                    flashData[i] = (byte) 0xFF;
+                }
+                FileOutputStream fos = new FileOutputStream(targetFile);
+                fos.write(flashData);
+                fos.flush();
+                fos.close();
             }
         }catch (Exception e){
             e.printStackTrace();
