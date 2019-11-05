@@ -4,12 +4,17 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.util.Log;
 
 import com.telink.sig.mesh.event.Event;
 import com.telink.sig.mesh.event.EventBus;
 import com.telink.sig.mesh.event.EventListener;
 import com.telink.sig.mesh.lib.MeshLib;
+import com.telink.sig.mesh.light.MeshService;
+import com.telink.sig.mesh.util.AuthValueManager;
 import com.telink.sig.mesh.util.TelinkLog;
+
+import java.io.File;
 
 /**
  * @program: TelinkSigMeshRelease
@@ -39,10 +44,25 @@ public class MeshManager {
         return instance;
      }
 
+
+    public static final String FILE_NAME = "telink.flash";
+
     public void init(Context context){
         mApplication = (Application) context.getApplicationContext();
-
         mEventBus = new EventBus<>();
+        try{
+            File dir = context.getFilesDir();
+            File targetFile = new File(dir.getAbsolutePath() + File.separator + FILE_NAME);
+            if (targetFile.exists()) {
+                if (targetFile.length() >= 512 * 1024) {
+                    targetFile.delete();
+                    TelinkLog.w("mesh flash delete");
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
 
         HandlerThread offlineCheckThread = new HandlerThread("offline check thread");
         offlineCheckThread.start();
@@ -51,10 +71,48 @@ public class MeshManager {
         meshLib = new MeshLib(mApplication);
         // getLibVersion 必须调用
         int libVersion = meshLib.getLibVersion();
-        TelinkLog.w("mesh lib version:" + Integer.toHexString(libVersion));
         meshLib.masterClockInit();
         meshLib.meshInitAll();
         meshLib.resetVendorId(VENDOR_ID);
+        meshLib.setGattProCloudEn((byte) 1);
+        meshLib.setVendorHelper(new MeshLib.VendorHelper() {
+            @Override
+            public int setProvCloudParams(byte[] pid, byte[] mac) {
+                return 0;
+            }
+
+            @Override
+            public int setProvCloudConfirm(byte[] confirm, byte[] confirmKey, byte[] proRandom) {
+                String mac = MeshService.getInstance().getCurDeviceMac();
+                byte[] authValue = AuthValueManager.getAuthData(mac);
+                byte[] confirmData = new byte[32];
+                System.arraycopy(proRandom,0,confirmData,0,16);
+                System.arraycopy(authValue,0,confirmData,16,16);
+                byte[] aes = AuthValueManager.aesCmac(confirmData,confirmKey);
+                System.arraycopy(aes,0,confirm,0,16);
+
+                TelinkLog.d("setProvCloudConfirm() called with: confirm = [" + AuthValueManager.getHexString(confirm) + "]");
+                return 1;
+            }
+
+            @Override
+            public int cloudDevConfirmCheck(byte[] confirmKey, byte[] devRandom, byte[] devConfirm) {
+                String mac = MeshService.getInstance().getCurDeviceMac();
+                byte[] authValue = AuthValueManager.getAuthData(mac);
+//                byte[] authValue = AuthValueManager.getAuthValue("f8a7630c173a");
+                byte[] confirmData = new byte[32];
+                System.arraycopy(devRandom,0,confirmData,0,16);
+                System.arraycopy(authValue,0,confirmData,16,16);
+                byte[] confirm = AuthValueManager.aesCmac(confirmData,confirmKey);
+                TelinkLog.d( "cloudDevConfirmCheck() called with: confirmKey = [" + AuthValueManager.getHexString(confirmKey) + "], devRandom = [" + AuthValueManager.getHexString(devRandom) + "], devConfirm = [" + AuthValueManager.getHexString(devConfirm) + "]");
+                return AuthValueManager.compareConfirm(confirm,devConfirm)?1:0;
+            }
+
+            @Override
+            public void gattProvisionNetInfoCallback() {
+
+            }
+        });
     }
 
 
