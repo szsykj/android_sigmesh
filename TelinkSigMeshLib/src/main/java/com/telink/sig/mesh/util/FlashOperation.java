@@ -78,7 +78,7 @@ public abstract class FlashOperation {
     }
 
     public synchronized static void readFlash(Context context, ByteBuffer buffer, int addr, int len) {
-//        TelinkLog.d("FlashOperation#readFlash -- buffer capacity:" + buffer.capacity() + " -- addr:" + addr + " -- len:" + len);
+        TelinkLog.d("FlashOperation#readFlash -- buffer capacity:" + buffer.capacity() + " -- addr:" + addr + " -- len:" + len);
         byte[] flashData = null;
 
         File dir = context.getFilesDir();
@@ -104,15 +104,15 @@ public abstract class FlashOperation {
             }
         } catch (IOException e) {
         }
-//        TelinkLog.e("readFlash -- flashData capacity:" + flashData.length + " -- addr:" + addr + " -- len:" + len);
+        TelinkLog.e("readFlash -- flashData capacity:" + flashData.length + " -- addr:" + addr + " -- len:" + len);
         byte[] result = new byte[len];
         System.arraycopy(flashData, addr, result, 0, len);
         buffer.position(0);
 //        buffer.
         buffer.put(result);
-//        TelinkLog.e("########## buffer.capacity: " + buffer.capacity());
+        TelinkLog.e("########## buffer.capacity: " + buffer.capacity());
         byte data0 = buffer.get(0);
-//        TelinkLog.e("########## buffer.get(0): " + buffer.get(0));
+        TelinkLog.e("########## buffer.get(0): " + buffer.get(0));
 
 //        return flashData;
     }
