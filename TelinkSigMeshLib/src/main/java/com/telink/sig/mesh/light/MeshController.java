@@ -299,12 +299,12 @@ public class MeshController {
     /**
      * connect timeout
      */
-    private static final long CONNECTION_TIMEOUT = 10 * 1000;
+    private static final long CONNECTION_TIMEOUT = 15 * 1000;
 
     /**
      * connect retry
      */
-    private static final int MAX_CONNECT_RETRY = 3;
+    private static final int MAX_CONNECT_RETRY = 5;
 
     /**
      * scanned device list
