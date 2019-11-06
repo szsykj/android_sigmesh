@@ -28,6 +28,8 @@ import com.telink.sig.mesh.util.Arrays;
 import com.telink.sig.mesh.util.FlashOperation;
 import com.telink.sig.mesh.util.TelinkLog;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -110,8 +112,41 @@ public class MeshLib {
             helper.onProvisionBeaconChecked(result);
         }*/
     }
-
+    public static final String FILE_NAME = "telink.flash";
+    public static final int DATA_LEN = 1024*1024;
     public void flashRead(ByteBuffer byteBuffer, int addr, int len) {
+        try{
+            File dir = context.getFilesDir();
+            File targetFile = new File(dir.getAbsolutePath() + File.separator + FILE_NAME);
+            if (targetFile.exists()) {
+                if (targetFile.length() >= 512 * 1024) {
+                    targetFile.delete();
+                    TelinkLog.w("mesh flash delete");
+                }
+
+                targetFile.createNewFile();
+                byte[] flashData = new byte[DATA_LEN];
+                for (int i = 0; i < flashData.length; i++) {
+                    flashData[i] = (byte) 0xFF;
+                }
+                FileOutputStream fos = new FileOutputStream(targetFile);
+                fos.write(flashData);
+                fos.flush();
+                fos.close();
+            }else {
+                targetFile.createNewFile();
+                byte[] flashData = new byte[DATA_LEN];
+                for (int i = 0; i < flashData.length; i++) {
+                    flashData[i] = (byte) 0xFF;
+                }
+                FileOutputStream fos = new FileOutputStream(targetFile);
+                fos.write(flashData);
+                fos.flush();
+                fos.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         FlashOperation.readFlash(context, byteBuffer, addr, len);
     }
 
