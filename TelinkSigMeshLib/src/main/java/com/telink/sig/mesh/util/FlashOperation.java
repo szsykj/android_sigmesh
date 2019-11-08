@@ -32,7 +32,7 @@ import java.nio.ByteBuffer;
 
 public abstract class FlashOperation {
 
-    public static final String FILE_NAME = "telink.flash";
+    public static final String FILE_NAME = "nvc.flash";
 
     public static final int DATA_LEN = 1024 * 1024;
 
