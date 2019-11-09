@@ -124,7 +124,7 @@ public class MeshService extends Service {
         Notification notification = new Notification.Builder(this)
                 .setContentTitle("Celightling Running...")
                 .setContentText("Click to know more or stop the APP.")
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.mipmap.ic)
                 .setChannelId(CHANNEL_ID)
                 .build();
         startForeground(1, notification);
