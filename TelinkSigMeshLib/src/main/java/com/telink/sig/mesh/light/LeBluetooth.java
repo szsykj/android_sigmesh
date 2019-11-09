@@ -163,12 +163,12 @@ public final class LeBluetooth {
             return;
         }
 
-        if (!getAdapter(mContext).startLeScan(serviceUUIDs,
+        if (!mAdapter.startLeScan(serviceUUIDs,
                 mLeScanCallback)) {
             synchronized (this) {
                 mScanning = false;
             }
-            getAdapter(mContext).stopLeScan(mLeScanCallback);
+            mAdapter.stopLeScan(mLeScanCallback);
             if (mCallback != null)
                 mCallback.onScanFail(SCAN_FAILED_FEATURE_UNSUPPORTED);
         } else {
@@ -199,8 +199,8 @@ public final class LeBluetooth {
         }
 
         try {
-            if (getAdapter(mContext) != null)
-                getAdapter(mContext).stopLeScan(mLeScanCallback);
+            if (mAdapter != null)
+                mAdapter.stopLeScan(mLeScanCallback);
         } catch (Exception e) {
             TelinkLog.d("Bluetooth stop error");
         }
@@ -220,8 +220,8 @@ public final class LeBluetooth {
      * @return
      */
     public boolean isEnabled() {
-        return this.getAdapter(mContext) != null
-                && this.getAdapter(mContext).isEnabled();
+        return this.mAdapter != null
+                && this.mAdapter.isEnabled();
     }
 
     /**
@@ -237,23 +237,20 @@ public final class LeBluetooth {
 
     public boolean enable(Context context) {
         BluetoothAdapter mAdapter = getAdapter(context);
-        if (getAdapter(mContext) == null)
+        if (mAdapter == null)
             return false;
-        if (getAdapter(mContext).isEnabled())
+        if (mAdapter.isEnabled())
             return true;
-        return getAdapter(mContext).enable();
+        return mAdapter.enable();
     }
 
-    private static final String TAG = "LeBluetooth";
     public BluetoothAdapter getAdapter(Context context) {
         synchronized (this) {
-            Log.d(TAG, "getAdapter() called with: get start ");
-//            if (mAdapter == null) {
+            if (mAdapter == null) {
                 BluetoothManager manager = (BluetoothManager) context
                         .getSystemService(Context.BLUETOOTH_SERVICE);
                 this.mAdapter = manager.getAdapter();
-                Log.d(TAG, "getAdapter() called with: get end");
-//            }
+            }
         }
 
         return this.mAdapter;
