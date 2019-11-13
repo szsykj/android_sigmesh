@@ -682,7 +682,7 @@ public class MeshController {
         if (disconnect && mDevice != null) {
             mDevice.disconnect();
         }
-        stopScan();
+//        stopScan();
     }
 
     public String getCurDeviceMac() {
@@ -698,7 +698,7 @@ public class MeshController {
     }
 
 
-    private void stopScan() {
+    public void stopScan() {
         isScanning.set(false);
         mDelayHandler.removeCallbacks(scanTimeoutTask);
         LeBluetooth.getInstance().stopScan();

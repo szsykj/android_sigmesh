@@ -201,6 +201,11 @@ public class MeshService extends Service {
         mMeshController.startScan(parameters);
     }
 
+    public void stopScan() {
+        mMeshController.stopScan();
+    }
+
+
     /**
      * start provision
      * provision result will post by event
