@@ -289,6 +289,9 @@ public class MeshService extends Service {
     //nvc增加代码--查询当前模式
     public int getActionMode(){return  mMeshController.getActionMode();}
 
+    public MeshController getMeshController() {
+        return mMeshController;
+    }
 
     /*******************************************************************************************
      * mesh setting
