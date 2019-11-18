@@ -2286,7 +2286,13 @@ public class MeshController {
         TelinkLog.d("cmd complete opCode -- " + String.format("%06X", opCode) + " rspMax -- " + rspMax + " rspCnt -- " + rspCnt);
         synchronized (CMD_LOCK) {
             if (processingCmd != null) {
-                if (processingCmd.opcode == opCode) {
+                final OpcodeType type = MeshUtils.getOpType(processingCmd.opcode);
+                //修复vendor指令返回码判断
+                if (type == OpcodeType.VENDOR && opCode == (processingCmd.opcode & 0xff)){
+                    processingCmd.rspCnt = rspCnt;
+                    onCommandEvent(CommandEvent.EVENT_TYPE_CMD_COMPLETE, processingCmd);
+                    processingCmd = null;
+                }else if (processingCmd.opcode == opCode) {
                     processingCmd.rspCnt = rspCnt;
                     onCommandEvent(CommandEvent.EVENT_TYPE_CMD_COMPLETE, processingCmd);
                     processingCmd = null;
