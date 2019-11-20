@@ -62,6 +62,8 @@ import com.telink.sig.mesh.model.message.config.SubVendorGetMessage;
 import com.telink.sig.mesh.util.TelinkLog;
 import com.telink.sig.mesh.util.UnitConvert;
 
+import java.util.Set;
+
 import static com.telink.sig.mesh.light.Opcode.G_INFO_GET;
 
 /**
@@ -277,6 +279,9 @@ public class MeshService extends Service {
         return mMeshController.getCurDeviceMac();
     }
 
+    public void updateConnectTargets(Set<String> autoConnectTargets){
+        mMeshController.updateConnectTargets(autoConnectTargets);
+    }
     /**
      * get mesh if is offline in auto connect mode
      *

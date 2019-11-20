@@ -485,6 +485,17 @@ public class MeshController {
         return true;
     }
 
+    public void updateConnectTargets(Set<String> autoConnectTargets){
+        if (autoConnectTargets == null || autoConnectTargets.size() == 0) {
+            mDelayHandler.removeCallbacksAndMessages(null);
+            onMeshEvent(MeshEvent.EVENT_TYPE_MESH_EMPTY, "mesh empty");
+            idle(true);
+        }else {
+            this.autoConnectTargets = autoConnectTargets;
+        }
+    }
+
+
 
     public boolean updateAutoConnectParams(AutoConnectParameters parameters) {
         if (this.actionMode != MODE_AUTO_CONNECT) return false;
