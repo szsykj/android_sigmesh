@@ -912,8 +912,9 @@ public class MeshController {
         TelinkLog.d("connect device:" + device.getAddress() + " -- " + rssi);
         mDelayHandler.removeCallbacks(scanTimeoutTask);
         stopScan();
-
-        mDevice.connect(device, scanRecord, rssi);
+        if (mDevice != null) {
+            mDevice.connect(device, scanRecord, rssi);
+        }
         mDelayHandler.removeCallbacks(connectTimeoutTask);
         mDelayHandler.postDelayed(connectTimeoutTask, CONNECTION_TIMEOUT);
         saveLog("connect:" + device.getAddress());
