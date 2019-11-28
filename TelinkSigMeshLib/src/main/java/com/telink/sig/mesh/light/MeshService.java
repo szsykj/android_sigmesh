@@ -264,6 +264,9 @@ public class MeshService extends Service {
         mMeshController.idle(disconnect);
     }
 
+    public void disconnect() {
+        mMeshController.disconnect();
+    }
     /**
      * ota for target device with mac
      *
