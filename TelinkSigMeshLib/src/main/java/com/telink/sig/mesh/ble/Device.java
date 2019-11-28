@@ -220,6 +220,11 @@ public class Device extends BluetoothGattCallback {
         }
     }
 
+    public void disConnect(){
+        this.gatt.disconnect();
+        this.gatt.close();
+        this.mConnState.set(CONN_STATE_IDLE);
+    }
 
     /**
      * disconnect backup

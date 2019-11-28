@@ -693,7 +693,14 @@ public class MeshController {
         if (disconnect && mDevice != null) {
             mDevice.disconnect();
         }
-//        stopScan();
+        stopScan();
+    }
+
+    public void disconnect() {
+        this.actionMode = MODE_IDLE;
+        if (mDevice != null) {
+            mDevice.disConnect();
+        }
     }
 
     public String getCurDeviceMac() {
@@ -717,7 +724,7 @@ public class MeshController {
 
     private void startScan() {
         TelinkLog.d("startScan");
-//        stopScan();
+        stopScan();
         mDelayHandler.removeCallbacks(scanTimeoutTask);
 
         mDelayHandler.removeCallbacks(rssiCheckTask);
