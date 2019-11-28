@@ -299,12 +299,12 @@ public class MeshController {
     /**
      * connect timeout
      */
-    private static final long CONNECTION_TIMEOUT = 15 * 1000;
+    private static final long CONNECTION_TIMEOUT = 10 * 1000;
 
     /**
      * connect retry
      */
-    private static final int MAX_CONNECT_RETRY = 5;
+    private static final int MAX_CONNECT_RETRY = 3;
 
     /**
      * scanned device list
@@ -717,7 +717,7 @@ public class MeshController {
 
     private void startScan() {
         TelinkLog.d("startScan");
-        stopScan();
+//        stopScan();
         mDelayHandler.removeCallbacks(scanTimeoutTask);
 
         mDelayHandler.removeCallbacks(rssiCheckTask);
@@ -1141,8 +1141,8 @@ public class MeshController {
                     public void run() {
                         mDevice.writeCCCForPv();
                     }
-                }, 100);
-                mDelayHandler.postDelayed(provisionTask, 200);
+                }, 500);
+                mDelayHandler.postDelayed(provisionTask, 600);
             } else if (actionMode == MODE_OTA) {
                 mDelayHandler.postDelayed(new Runnable() {
                     @Override
