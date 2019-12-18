@@ -1006,6 +1006,7 @@ public class MeshController {
 
         public void clear() {
 //            this.mCancelled.set(true);
+            mThread.quitSafely();
             this.mQueue.clear();
         }
 
@@ -1129,8 +1130,8 @@ public class MeshController {
                     public void run() {
                         mDevice.writeCCCForPv();
                     }
-                }, 100);
-                mDelayHandler.postDelayed(provisionTask, 200);
+                }, 500);
+                mDelayHandler.postDelayed(provisionTask, 600);
             } else if (actionMode == MODE_OTA) {
                 mDelayHandler.postDelayed(new Runnable() {
                     @Override
