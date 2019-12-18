@@ -1025,6 +1025,7 @@ public class MeshController {
 
         public void clear() {
 //            this.mCancelled.set(true);
+            mThread.quitSafely();
             this.mQueue.clear();
         }
 
