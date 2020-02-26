@@ -124,7 +124,7 @@ public class DeviceInfo implements Serializable {
             handler.postDelayed(offlineCheckTask, pubTimeOut);
             TelinkLog.d("offline check task running count "+ heartbeatCount + "adr -- " + meshAddress);
             //修改去除telinkApplication
-            if (heartbeatCount > 3 && onOff != -1) {
+            if (heartbeatCount >= 3 && onOff != -1) {
                 onOff = -1;
                 isHeartbeatStart = false;
                 handler.removeCallbacks(offlineCheckTask);
