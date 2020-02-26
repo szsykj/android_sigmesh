@@ -160,12 +160,18 @@ public class DeviceInfo implements Serializable {
         //修改去除telinkApplication
         Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
         handler.removeCallbacks(offlineCheckTask);
-        if (this.publishModel != null && this.onOff != -1) {
-            int timeout = publishModel.period * 3 + 2;
+        if (this.onOff != -1) {
+            int timeout = 16 * 1000 * 3 + 2;
             if (timeout > 0) {
                 handler.postDelayed(offlineCheckTask, timeout);
             }
         }
+//        if (this.publishModel != null && this.onOff != -1) {
+//            int timeout = 16 * 1000 * 3 + 2;
+//            if (timeout > 0) {
+//                handler.postDelayed(offlineCheckTask, timeout);
+//            }
+//        }
     }
 
     public boolean isRelayEnable() {

@@ -240,12 +240,12 @@ public class DeviceProvisionActivity extends BaseActivity implements View.OnClic
                 } else if (event.getType().equals(ScanEvent.DEVICE_FOUND)) {
                     AdvertisingDevice device = ((ScanEvent) event).advertisingDevice;
                     Log.d(TAG, "DEVICE_FOUND device.mac "+  device.device.getAddress());
-
-                    try {
-                        getAuthData(device.device.getAddress(),event);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    onDeviceFound(device);
+//                    try {
+//                        getAuthData(device.device.getAddress(),event);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
 
                 }
             }
