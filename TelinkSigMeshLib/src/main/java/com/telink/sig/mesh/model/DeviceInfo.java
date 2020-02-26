@@ -111,16 +111,17 @@ public class DeviceInfo implements Serializable {
     // 是否打开relay功能 ： for test
     private boolean relayEnable = true;
 
-    private int heartbeatCount = 0;
 
     /**
      * 5s interval, 3 cnt
      */
 //    private static final int OFFLINE_CHECK_PERIOD = MeshLib.Constant.PUB_INTERVAL * 3 + 2;
+    Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
     private OfflineCheckTask offlineCheckTask = new OfflineCheckTask() {
         @Override
         public void run() {
             heartbeatCount++;
+            handler.postDelayed(offlineCheckTask, pubTimeOut);
             TelinkLog.d("offline check task running count "+ heartbeatCount);
             //修改去除telinkApplication
             if (heartbeatCount >= 3 && onOff != -1) {
@@ -142,15 +143,18 @@ public class DeviceInfo implements Serializable {
         MeshManager.getInstance().saveLog("device on off status change : " + onOff + " adr -- " + meshAddress + " mac -- " + macAddress);
 //        if (publishModel != null) {
             //修改去除telinkApplication
-            Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
-            handler.removeCallbacks(offlineCheckTask);
-            if (this.onOff != -1 && pubTimeOut > 0) {
+
+            if (this.onOff != -1 && !isHeartbeatStart) {
+                isHeartbeatStart = true;
                 handler.postDelayed(offlineCheckTask, pubTimeOut);
             }
+
 //        }
     }
 
     int pubTimeOut = 16 * 1000;
+    int heartbeatCount = 0;
+    boolean isHeartbeatStart = false;
     public boolean isPubSet() {
         return publishModel != null;
     }
@@ -160,16 +164,15 @@ public class DeviceInfo implements Serializable {
     }
 
     public void setPublishModel(PublishModel model) {
-        this.publishModel = model;
-        //修改去除telinkApplication
-        Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
-        handler.removeCallbacks(offlineCheckTask);
-        if (this.onOff != -1) {
-            int timeout = pubTimeOut;
-            if (timeout > 0) {
-                handler.postDelayed(offlineCheckTask, timeout);
-            }
-        }
+//        this.publishModel = model;
+//        //修改去除telinkApplication
+//        handler.removeCallbacks(offlineCheckTask);
+//        if (this.onOff != -1) {
+//            int timeout = pubTimeOut;
+//            if (timeout > 0) {
+//                handler.postDelayed(offlineCheckTask, timeout);
+//            }
+//        }
 //        if (this.publishModel != null && this.onOff != -1) {
 //            int timeout = 16 * 1000 * 3 + 2;
 //            if (timeout > 0) {
