@@ -126,6 +126,7 @@ public class DeviceInfo implements Serializable {
             //修改去除telinkApplication
             if (heartbeatCount > 3 && onOff != -1) {
                 onOff = -1;
+                isHeartbeatStart = false;
                 handler.removeCallbacks(offlineCheckTask);
                 TelinkLog.d("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
                 MeshManager.getInstance().dispatchEvent(new MeshEvent(MeshManager.getInstance(), MeshEvent.EVENT_TYPE_DEVICE_OFFLINE, DeviceInfo.this));
