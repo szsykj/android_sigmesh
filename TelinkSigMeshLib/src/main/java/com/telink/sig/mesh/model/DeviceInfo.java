@@ -111,19 +111,23 @@ public class DeviceInfo implements Serializable {
     // 是否打开relay功能 ： for test
     private boolean relayEnable = true;
 
+    private int heartbeatCount = 0;
+
     /**
      * 5s interval, 3 cnt
      */
 //    private static final int OFFLINE_CHECK_PERIOD = MeshLib.Constant.PUB_INTERVAL * 3 + 2;
-
     private OfflineCheckTask offlineCheckTask = new OfflineCheckTask() {
         @Override
         public void run() {
-            onOff = -1;
-            TelinkLog.d("offline check task running");
+            heartbeatCount++;
+            TelinkLog.d("offline check task running count "+ heartbeatCount);
             //修改去除telinkApplication
-            MeshManager.getInstance().saveLog("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
-            MeshManager.getInstance().dispatchEvent(new MeshEvent(MeshManager.getInstance(), MeshEvent.EVENT_TYPE_DEVICE_OFFLINE, DeviceInfo.this));
+            if (heartbeatCount >= 3 && onOff != -1) {
+                onOff = -1;
+                MeshManager.getInstance().saveLog("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
+                MeshManager.getInstance().dispatchEvent(new MeshEvent(MeshManager.getInstance(), MeshEvent.EVENT_TYPE_DEVICE_OFFLINE, DeviceInfo.this));
+            }
         }
     };
 
@@ -133,20 +137,20 @@ public class DeviceInfo implements Serializable {
 
     public void setOnOff(int onOff) {
         this.onOff = onOff;
+        heartbeatCount = 0;
         //修改去除telinkApplication
         MeshManager.getInstance().saveLog("device on off status change : " + onOff + " adr -- " + meshAddress + " mac -- " + macAddress);
 //        if (publishModel != null) {
             //修改去除telinkApplication
             Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
             handler.removeCallbacks(offlineCheckTask);
-            int timeout =  16 * 1000 * 3 + 2;
-            if (this.onOff != -1 && timeout > 0) {
-                handler.postDelayed(offlineCheckTask, timeout);
+            if (this.onOff != -1 && pubTimeOut > 0) {
+                handler.postDelayed(offlineCheckTask, pubTimeOut);
             }
 //        }
     }
 
-
+    int pubTimeOut = 16 * 1000;
     public boolean isPubSet() {
         return publishModel != null;
     }
@@ -161,7 +165,7 @@ public class DeviceInfo implements Serializable {
         Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
         handler.removeCallbacks(offlineCheckTask);
         if (this.onOff != -1) {
-            int timeout = 16 * 1000 * 3 + 2;
+            int timeout = pubTimeOut;
             if (timeout > 0) {
                 handler.postDelayed(offlineCheckTask, timeout);
             }
