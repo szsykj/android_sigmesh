@@ -126,7 +126,7 @@ public class DeviceInfo implements Serializable {
             //修改去除telinkApplication
             if (heartbeatCount >= 3 && onOff != -1) {
                 onOff = -1;
-                MeshManager.getInstance().saveLog("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
+                TelinkLog.d("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
                 MeshManager.getInstance().dispatchEvent(new MeshEvent(MeshManager.getInstance(), MeshEvent.EVENT_TYPE_DEVICE_OFFLINE, DeviceInfo.this));
             }
         }
@@ -140,7 +140,7 @@ public class DeviceInfo implements Serializable {
         this.onOff = onOff;
         heartbeatCount = 0;
         //修改去除telinkApplication
-        MeshManager.getInstance().saveLog("device on off status change : " + onOff + " adr -- " + meshAddress + " mac -- " + macAddress);
+        TelinkLog.d("device on off status change : " + onOff + " adr -- " + meshAddress + " mac -- " + macAddress);
 //        if (publishModel != null) {
             //修改去除telinkApplication
 
