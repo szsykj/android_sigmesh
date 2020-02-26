@@ -69,7 +69,7 @@ public class DeviceSettingFragment extends BaseFragment implements View.OnClickL
     private CheckBox cb_pub, cb_relay;
     private PublishModel pubModel;
     private TextView tv_pub;
-    private static final int PUB_INTERVAL = 20 * 1000;
+    private static final int PUB_INTERVAL = 16 * 1000;
 
     private static final int PUB_ADDRESS = 0xFFFF;
 
@@ -117,30 +117,30 @@ public class DeviceSettingFragment extends BaseFragment implements View.OnClickL
         int pubEleAdr = deviceInfo.getTargetEleAdr(modelId);
         String desc = null;
 
-        if (pubEleAdr != -1) {
-            pubModel = new PublishModel(pubEleAdr, modelId, address, pubInterval);
-            desc = "CTL";
-            tv_pub.setText(getString(R.string.publication_setting, String.format("%04X", pubEleAdr), desc));
-            return;
-        }
-
-        modelId = SigMeshModel.SIG_MD_LIGHT_HSL_S.modelId;
-        pubEleAdr = deviceInfo.getTargetEleAdr(modelId);
-        if (pubEleAdr != -1) {
-            pubModel = new PublishModel(pubEleAdr, modelId, address, pubInterval);
-            desc = "HSL";
-            tv_pub.setText(getString(R.string.publication_setting, String.format("%04X", pubEleAdr), desc));
-            return;
-        }
-
-        modelId = SigMeshModel.SIG_MD_LIGHTNESS_S.modelId;
-        pubEleAdr = deviceInfo.getTargetEleAdr(modelId);
-        if (pubEleAdr != -1) {
-            pubModel = new PublishModel(pubEleAdr, modelId, address, pubInterval);
-            desc = "LIGHTNESS";
-            tv_pub.setText(getString(R.string.publication_setting, String.format("%04X", pubEleAdr), desc));
-            return;
-        }
+//        if (pubEleAdr != -1) {
+//            pubModel = new PublishModel(pubEleAdr, modelId, address, pubInterval);
+//            desc = "CTL";
+//            tv_pub.setText(getString(R.string.publication_setting, String.format("%04X", pubEleAdr), desc));
+//            return;
+//        }
+//
+//        modelId = SigMeshModel.SIG_MD_LIGHT_HSL_S.modelId;
+//        pubEleAdr = deviceInfo.getTargetEleAdr(modelId);
+//        if (pubEleAdr != -1) {
+//            pubModel = new PublishModel(pubEleAdr, modelId, address, pubInterval);
+//            desc = "HSL";
+//            tv_pub.setText(getString(R.string.publication_setting, String.format("%04X", pubEleAdr), desc));
+//            return;
+//        }
+//
+//        modelId = SigMeshModel.SIG_MD_LIGHTNESS_S.modelId;
+//        pubEleAdr = deviceInfo.getTargetEleAdr(modelId);
+//        if (pubEleAdr != -1) {
+//            pubModel = new PublishModel(pubEleAdr, modelId, address, pubInterval);
+//            desc = "LIGHTNESS";
+//            tv_pub.setText(getString(R.string.publication_setting, String.format("%04X", pubEleAdr), desc));
+//            return;
+//        }
 
         modelId = SigMeshModel.SIG_MD_G_ONOFF_S.modelId;
         pubEleAdr = deviceInfo.getTargetEleAdr(modelId);

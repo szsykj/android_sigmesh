@@ -60,7 +60,7 @@ public class MeshManager {
         meshLib.masterClockInit();
         meshLib.meshInitAll();
         meshLib.resetVendorId(VENDOR_ID);
-        meshLib.setGattProCloudEn((byte) 1);
+        meshLib.setGattProCloudEn((byte) 0);
         meshLib.setVendorHelper(new MeshLib.VendorHelper() {
             @Override
             public int setProvCloudParams(byte[] pid, byte[] mac) {
