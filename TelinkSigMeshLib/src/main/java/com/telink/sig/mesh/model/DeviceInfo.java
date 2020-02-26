@@ -122,10 +122,11 @@ public class DeviceInfo implements Serializable {
         public void run() {
             heartbeatCount++;
             handler.postDelayed(offlineCheckTask, pubTimeOut);
-            TelinkLog.d("offline check task running count "+ heartbeatCount);
+            TelinkLog.d("offline check task running count "+ heartbeatCount + "adr -- " + meshAddress);
             //修改去除telinkApplication
-            if (heartbeatCount >= 3 && onOff != -1) {
+            if (heartbeatCount > 3 && onOff != -1) {
                 onOff = -1;
+                handler.removeCallbacks(offlineCheckTask);
                 TelinkLog.d("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
                 MeshManager.getInstance().dispatchEvent(new MeshEvent(MeshManager.getInstance(), MeshEvent.EVENT_TYPE_DEVICE_OFFLINE, DeviceInfo.this));
             }
