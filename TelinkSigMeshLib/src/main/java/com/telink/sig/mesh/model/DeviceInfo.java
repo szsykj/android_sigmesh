@@ -135,15 +135,15 @@ public class DeviceInfo implements Serializable {
         this.onOff = onOff;
         //修改去除telinkApplication
         MeshManager.getInstance().saveLog("device on off status change : " + onOff + " adr -- " + meshAddress + " mac -- " + macAddress);
-        if (publishModel != null) {
+//        if (publishModel != null) {
             //修改去除telinkApplication
             Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
             handler.removeCallbacks(offlineCheckTask);
-            int timeout = publishModel.period * 3 + 2;
+            int timeout =  16 * 1000 * 3 + 2;
             if (this.onOff != -1 && timeout > 0) {
                 handler.postDelayed(offlineCheckTask, timeout);
             }
-        }
+//        }
     }
 
 
