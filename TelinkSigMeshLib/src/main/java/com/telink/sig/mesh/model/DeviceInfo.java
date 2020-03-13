@@ -25,7 +25,6 @@ import android.os.Handler;
 import android.util.SparseBooleanArray;
 
 import com.telink.sig.mesh.MeshManager;
-import com.telink.sig.mesh.TelinkApplication;
 import com.telink.sig.mesh.event.MeshEvent;
 import com.telink.sig.mesh.util.TelinkLog;
 
@@ -124,9 +123,10 @@ public class DeviceInfo implements Serializable {
             handler.postDelayed(offlineCheckTask, pubTimeOut);
             TelinkLog.d("offline check task running count "+ heartbeatCount + "adr -- " + meshAddress);
             //修改去除telinkApplication
-            if (heartbeatCount >= 3 && onOff != -1) {
+            if (heartbeatCount >= 2 && onOff != -1) {
+
                 onOff = -1;
-                isHeartbeatStart = false;
+                checkOfflineRun = false;
                 handler.removeCallbacks(offlineCheckTask);
                 TelinkLog.d("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
                 MeshManager.getInstance().dispatchEvent(new MeshEvent(MeshManager.getInstance(), MeshEvent.EVENT_TYPE_DEVICE_OFFLINE, DeviceInfo.this));
@@ -146,8 +146,8 @@ public class DeviceInfo implements Serializable {
 //        if (publishModel != null) {
             //修改去除telinkApplication
 
-            if (this.onOff != -1 && !isHeartbeatStart) {
-                isHeartbeatStart = true;
+            if (this.onOff != -1 && !checkOfflineRun) {
+                checkOfflineRun = true;
                 handler.postDelayed(offlineCheckTask, pubTimeOut);
             }
 
@@ -156,7 +156,8 @@ public class DeviceInfo implements Serializable {
 
     int pubTimeOut = 16 * 1000;
     int heartbeatCount = 0;
-    boolean isHeartbeatStart = false;
+    boolean checkOfflineRun = false;//检测设备离线线程是否运行
+//    public boolean isHeratbeatOpen = false;//设备定时上报是否打开
     public boolean isPubSet() {
         return publishModel != null;
     }
@@ -166,7 +167,7 @@ public class DeviceInfo implements Serializable {
     }
 
     public void setPublishModel(PublishModel model) {
-//        this.publishModel = model;
+        this.publishModel = model;
 //        //修改去除telinkApplication
 //        handler.removeCallbacks(offlineCheckTask);
 //        if (this.onOff != -1) {
