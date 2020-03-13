@@ -122,7 +122,7 @@ public class DeviceInfo implements Serializable {
         @Override
         public void run() {
             heartbeatCount++;
-            handler.postDelayed(offlineCheckTask, pubTimeOut);
+            handler.postDelayed(offlineCheckTask, heartTimeOut);
             TelinkLog.d("offline check task running count "+ heartbeatCount + "adr -- " + meshAddress);
             //修改去除telinkApplication
             if (heartbeatCount == 2){
@@ -152,7 +152,7 @@ public class DeviceInfo implements Serializable {
 
             if (this.onOff != -1 && !checkOfflineRun) {
                 checkOfflineRun = true;
-                handler.postDelayed(offlineCheckTask, pubTimeOut);
+                handler.postDelayed(offlineCheckTask, heartTimeOut);
             }
 
 //        }
@@ -163,7 +163,7 @@ public class DeviceInfo implements Serializable {
         final int appKeyIndex = MeshService.getInstance().appKeyIndex;
         int modelId = SigMeshModel.SIG_MD_G_ONOFF_S.modelId;
         int pubEleAdr = getTargetEleAdr(modelId);
-        publishModel = new PublishModel(pubEleAdr, modelId, 0xffff, heartTime);
+        publishModel = new PublishModel(pubEleAdr, modelId, 0xffff, heartInterval);
         PubSetMessage pubSetMessage = PubSetMessage.createDefault(address,
                 publishModel.address, appKeyIndex, publishModel.period, publishModel.modelId, true);
         boolean result = MeshService.getInstance().setPublication(address, pubSetMessage, null);
@@ -171,8 +171,8 @@ public class DeviceInfo implements Serializable {
     }
 
 
-    int heartTime = 15 * 1000;
-    int pubTimeOut = 16 * 1000;
+    int heartInterval = 13 * 1000;
+    int heartTimeOut = 16 * 1000;
     int heartbeatCount = 0;
     boolean checkOfflineRun = false;//检测设备离线线程是否运行
 //    public boolean isHeratbeatOpen = false;//设备定时上报是否打开
