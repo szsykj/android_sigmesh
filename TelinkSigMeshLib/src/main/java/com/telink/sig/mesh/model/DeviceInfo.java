@@ -26,6 +26,8 @@ import android.util.SparseBooleanArray;
 
 import com.telink.sig.mesh.MeshManager;
 import com.telink.sig.mesh.event.MeshEvent;
+import com.telink.sig.mesh.light.MeshService;
+import com.telink.sig.mesh.model.message.config.PubSetMessage;
 import com.telink.sig.mesh.util.TelinkLog;
 
 import java.io.Serializable;
@@ -123,8 +125,10 @@ public class DeviceInfo implements Serializable {
             handler.postDelayed(offlineCheckTask, pubTimeOut);
             TelinkLog.d("offline check task running count "+ heartbeatCount + "adr -- " + meshAddress);
             //修改去除telinkApplication
-            if (heartbeatCount >= 2 && onOff != -1) {
-
+            if (heartbeatCount == 2){
+//                MeshService.getInstance().getOnOff(meshAddress,0,null);
+                setPublication(meshAddress);
+            }else if (heartbeatCount >= 3 && onOff != -1) {
                 onOff = -1;
                 checkOfflineRun = false;
                 handler.removeCallbacks(offlineCheckTask);
@@ -154,6 +158,20 @@ public class DeviceInfo implements Serializable {
 //        }
     }
 
+
+    public void setPublication(int address){
+        final int appKeyIndex = MeshService.getInstance().appKeyIndex;
+        int modelId = SigMeshModel.SIG_MD_G_ONOFF_S.modelId;
+        int pubEleAdr = getTargetEleAdr(modelId);
+        publishModel = new PublishModel(pubEleAdr, modelId, 0xffff, heartTime);
+        PubSetMessage pubSetMessage = PubSetMessage.createDefault(address,
+                publishModel.address, appKeyIndex, publishModel.period, publishModel.modelId, true);
+        boolean result = MeshService.getInstance().setPublication(address, pubSetMessage, null);
+        TelinkLog.d("setPublication : adr -- " + address + " result -- " + result);
+    }
+
+
+    int heartTime = 15 * 1000;
     int pubTimeOut = 16 * 1000;
     int heartbeatCount = 0;
     boolean checkOfflineRun = false;//检测设备离线线程是否运行
