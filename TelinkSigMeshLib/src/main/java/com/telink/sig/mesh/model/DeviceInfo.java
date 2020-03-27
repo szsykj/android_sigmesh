@@ -117,26 +117,26 @@ public class DeviceInfo implements Serializable {
      * 5s interval, 3 cnt
      */
 //    private static final int OFFLINE_CHECK_PERIOD = MeshLib.Constant.PUB_INTERVAL * 3 + 2;
-    Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
-    private OfflineCheckTask offlineCheckTask = new OfflineCheckTask() {
-        @Override
-        public void run() {
-            heartbeatCount++;
-            handler.postDelayed(offlineCheckTask, heartTimeOut);
-            TelinkLog.d("offline check task running count "+ heartbeatCount + "adr -- " + meshAddress);
-            //修改去除telinkApplication
-            if (heartbeatCount == 2){
-//                MeshService.getInstance().getOnOff(meshAddress,0,null);
-                setPublication(meshAddress);
-            }else if (heartbeatCount >= 3 && onOff != -1) {
-                onOff = -1;
-                checkOfflineRun = false;
-                handler.removeCallbacks(offlineCheckTask);
-                TelinkLog.d("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
-                MeshManager.getInstance().dispatchEvent(new MeshEvent(MeshManager.getInstance(), MeshEvent.EVENT_TYPE_DEVICE_OFFLINE, DeviceInfo.this));
-            }
-        }
-    };
+//    Handler handler = MeshManager.getInstance().getOfflineCheckHandler();
+//    private OfflineCheckTask offlineCheckTask = new OfflineCheckTask() {
+//        @Override
+//        public void run() {
+//            heartbeatCount++;
+//            handler.postDelayed(offlineCheckTask, heartTimeOut);
+//            TelinkLog.d("offline check task timeout count "+ heartbeatCount + " adr -- " + meshAddress);
+//            //修改去除telinkApplication
+//            if (heartbeatCount == 2){
+////                MeshService.getInstance().getOnOff(meshAddress,0,null);
+//                setPublication(meshAddress);
+//            }else if (heartbeatCount >= 3 && onOff != -1) {
+//                onOff = -1;
+//                checkOfflineRun = false;
+//                handler.removeCallbacks(offlineCheckTask);
+//                TelinkLog.d("device offline : adr -- " + meshAddress + " mac -- " + macAddress);
+//                MeshManager.getInstance().dispatchEvent(new MeshEvent(MeshManager.getInstance(), MeshEvent.EVENT_TYPE_DEVICE_OFFLINE, DeviceInfo.this));
+//            }
+//        }
+//    };
 
     public int getOnOff() {
         return onOff;
@@ -144,22 +144,21 @@ public class DeviceInfo implements Serializable {
 
     public void setOnOff(int onOff) {
         this.onOff = onOff;
-        heartbeatCount = 0;
+//        heartbeatCount = 0;
         //修改去除telinkApplication
         TelinkLog.d("device on off status change : " + onOff + " adr -- " + meshAddress + " mac -- " + macAddress);
 //        if (publishModel != null) {
             //修改去除telinkApplication
-
-            if (this.onOff != -1 && !checkOfflineRun) {
-                checkOfflineRun = true;
-                handler.postDelayed(offlineCheckTask, heartTimeOut);
-            }
+//            if (this.onOff != -1 && !checkOfflineRun) {
+//                checkOfflineRun = true;
+//                handler.postDelayed(offlineCheckTask, heartTimeOut);
+//            }
 
 //        }
     }
 
 
-    public void setPublication(int address){
+    public void setPublication(int address,int heartInterval){
         final int appKeyIndex = MeshService.getInstance().appKeyIndex;
         int modelId = SigMeshModel.SIG_MD_G_ONOFF_S.modelId;
         int pubEleAdr = getTargetEleAdr(modelId);
@@ -171,9 +170,9 @@ public class DeviceInfo implements Serializable {
     }
 
 
-    int heartInterval = 13 * 1000;
-    int heartTimeOut = 16 * 1000;
-    int heartbeatCount = 0;
+//    int heartInterval = 13 * 1000;
+//    int heartTimeOut = 16 * 1000;
+//    int heartbeatCount = 0;
     boolean checkOfflineRun = false;//检测设备离线线程是否运行
 //    public boolean isHeratbeatOpen = false;//设备定时上报是否打开
     public boolean isPubSet() {

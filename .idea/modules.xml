@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Sdk_sigmesh.iml" filepath="$PROJECT_DIR$/Sdk_sigmesh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TelinkSigMeshDemo/Sdk_sigmesh-TelinkSigMeshDemo.iml" filepath="$PROJECT_DIR$/TelinkSigMeshDemo/Sdk_sigmesh-TelinkSigMeshDemo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TelinkSigMeshLib/Sdk_sigmesh-TelinkSigMeshLib.iml" filepath="$PROJECT_DIR$/TelinkSigMeshLib/Sdk_sigmesh-TelinkSigMeshLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/TelinkSigMeshDemo/TelinkSigMeshDemo.iml" filepath="$PROJECT_DIR$/TelinkSigMeshDemo/TelinkSigMeshDemo.iml" />
       <module fileurl="file://$PROJECT_DIR$/TelinkSigMeshLib/TelinkSigMeshLib.iml" filepath="$PROJECT_DIR$/TelinkSigMeshLib/TelinkSigMeshLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/TelinkSigMeshRelease.iml" filepath="$PROJECT_DIR$/TelinkSigMeshRelease.iml" />
