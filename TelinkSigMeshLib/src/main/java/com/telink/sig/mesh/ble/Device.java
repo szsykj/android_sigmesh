@@ -201,12 +201,20 @@ public class Device extends BluetoothGattCallback {
         int connState = this.mConnState.get();
         if (connState != CONN_STATE_CONNECTING && connState != CONN_STATE_CONNECTED && connState != CONN_STATE_DISCONNECTING)
             return false;
+        TelinkLog.w("disconnect 2" + this.getDeviceName() + " -- "
+                + this.getMacAddress() + " -- " + mConnState.get());
         if (this.gatt != null) {
+            TelinkLog.w("disconnect 3" + this.getDeviceName() + " -- "
+                    + this.getMacAddress() + " -- " + mConnState.get());
             if (connState == CONN_STATE_CONNECTED) {
+                TelinkLog.w("disconnect 4" + this.getDeviceName() + " -- "
+                        + this.getMacAddress() + " -- " + mConnState.get());
                 this.mConnState.set(CONN_STATE_DISCONNECTING);
                 this.gatt.disconnect();
                 return true;
             } else if (connState == CONN_STATE_CONNECTING) {
+                TelinkLog.w("disconnect 5" + this.getDeviceName() + " -- "
+                        + this.getMacAddress() + " -- " + mConnState.get());
                 this.gatt.disconnect();
                 this.gatt.close();
                 this.mConnState.set(CONN_STATE_IDLE);
@@ -215,6 +223,8 @@ public class Device extends BluetoothGattCallback {
                 return true;
             }
         } else {
+            TelinkLog.w("disconnect 6" + this.getDeviceName() + " -- "
+                    + this.getMacAddress() + " -- " + mConnState.get());
             this.mConnState.set(CONN_STATE_IDLE);
             return false;
         }
@@ -378,7 +388,11 @@ public class Device extends BluetoothGattCallback {
 
     private void clear() {
         this.processing.set(false);
-        this.refreshCache();
+        try{
+            this.refreshCache();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         this.stopMonitoringRssi();
         this.cancelCommandTimeoutTask();
         this.mInputCommandQueue.clear();
