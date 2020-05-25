@@ -31,6 +31,7 @@ import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.content.Context;
 import android.os.Build;
+import android.os.DeadObjectException;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -207,24 +208,20 @@ public class Device extends BluetoothGattCallback {
             TelinkLog.w("disconnect 3" + this.getDeviceName() + " -- "
                     + this.getMacAddress() + " -- " + mConnState.get());
             if (connState == CONN_STATE_CONNECTED) {
-                TelinkLog.w("disconnect 4" + this.getDeviceName() + " -- "
-                        + this.getMacAddress() + " -- " + mConnState.get());
                 this.mConnState.set(CONN_STATE_DISCONNECTING);
                 this.gatt.disconnect();
                 return true;
             } else if (connState == CONN_STATE_CONNECTING) {
-                TelinkLog.w("disconnect 5" + this.getDeviceName() + " -- "
-                        + this.getMacAddress() + " -- " + mConnState.get());
                 this.gatt.disconnect();
                 this.gatt.close();
                 this.mConnState.set(CONN_STATE_IDLE);
                 return false;
             } else {
+                TelinkLog.w("disconnect 4" + this.getDeviceName() + " -- "
+                        + this.getMacAddress() + " -- " + mConnState.get());
                 return true;
             }
         } else {
-            TelinkLog.w("disconnect 6" + this.getDeviceName() + " -- "
-                    + this.getMacAddress() + " -- " + mConnState.get());
             this.mConnState.set(CONN_STATE_IDLE);
             return false;
         }
@@ -388,11 +385,7 @@ public class Device extends BluetoothGattCallback {
 
     private void clear() {
         this.processing.set(false);
-        try{
-            this.refreshCache();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        this.refreshCache();
         this.stopMonitoringRssi();
         this.cancelCommandTimeoutTask();
         this.mInputCommandQueue.clear();
@@ -424,7 +417,8 @@ public class Device extends BluetoothGattCallback {
                 return bool;
             }
         } catch (Exception localException) {
-            TelinkLog.e("An exception occured while refreshing device");
+            TelinkLog.d("localException"+localException.toString());
+            gatt = null;
         }
         return false;
     }
