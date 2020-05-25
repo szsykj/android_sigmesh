@@ -219,7 +219,8 @@ public class Device extends BluetoothGattCallback {
             } else {
                 TelinkLog.w("disconnect 4" + this.getDeviceName() + " -- "
                         + this.getMacAddress() + " -- " + mConnState.get());
-                return true;
+                this.mConnState.set(CONN_STATE_IDLE);
+                return false;
             }
         } else {
             this.mConnState.set(CONN_STATE_IDLE);
