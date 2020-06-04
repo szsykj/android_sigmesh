@@ -202,11 +202,7 @@ public class Device extends BluetoothGattCallback {
         int connState = this.mConnState.get();
         if (connState != CONN_STATE_CONNECTING && connState != CONN_STATE_CONNECTED && connState != CONN_STATE_DISCONNECTING)
             return false;
-        TelinkLog.w("disconnect 2" + this.getDeviceName() + " -- "
-                + this.getMacAddress() + " -- " + mConnState.get());
         if (this.gatt != null) {
-            TelinkLog.w("disconnect 3" + this.getDeviceName() + " -- "
-                    + this.getMacAddress() + " -- " + mConnState.get());
             if (connState == CONN_STATE_CONNECTED) {
                 this.mConnState.set(CONN_STATE_DISCONNECTING);
                 this.gatt.disconnect();
@@ -217,8 +213,6 @@ public class Device extends BluetoothGattCallback {
                 this.mConnState.set(CONN_STATE_IDLE);
                 return false;
             } else {
-                TelinkLog.w("disconnect 4" + this.getDeviceName() + " -- "
-                        + this.getMacAddress() + " -- " + mConnState.get());
                 this.mConnState.set(CONN_STATE_IDLE);
                 return false;
             }
