@@ -85,7 +85,7 @@ public abstract class FlashOperation {
         File targetFile = new File(dir.getAbsolutePath() + File.separator + FILE_NAME);
 
         try {
-            if (!targetFile.exists()) {
+            if (!targetFile.exists()|| targetFile.length() != 0) {
                 flashData = new byte[DATA_LEN];
                 for (int i = 0; i < flashData.length; i++) {
                     flashData[i] = (byte) 0xFF;
@@ -125,7 +125,7 @@ public abstract class FlashOperation {
         FileOutputStream fos;
         try {
 
-            if (!targetFile.exists()) {
+            if (!targetFile.exists()|| targetFile.length() != 0) {
 
                 targetFile.createNewFile();
                 flashData = new byte[DATA_LEN];
