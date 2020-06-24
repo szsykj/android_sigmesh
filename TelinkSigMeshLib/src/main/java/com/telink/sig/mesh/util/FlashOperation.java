@@ -106,7 +106,9 @@ public abstract class FlashOperation {
         }
 //        TelinkLog.e("readFlash -- flashData capacity:" + flashData.length + " -- addr:" + addr + " -- len:" + len);
         byte[] result = new byte[len];
-        System.arraycopy(flashData, addr, result, 0, len);
+        if (flashData != null && flashData.length > addr && (flashData.length - addr) >= len) {
+            System.arraycopy(flashData, addr, result, 0, len);
+        }
         buffer.position(0);
 //        buffer.
         buffer.put(result);
@@ -141,7 +143,9 @@ public abstract class FlashOperation {
                 stream.close();
             }
 
-            System.arraycopy(buffer, 0, flashData, addr, len);
+            if (flashData.length > addr) {
+                System.arraycopy(buffer, 0, flashData, addr, len);
+            }
 
             fos = new FileOutputStream(targetFile);
             fos.write(flashData);
