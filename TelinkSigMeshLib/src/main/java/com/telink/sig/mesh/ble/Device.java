@@ -777,7 +777,7 @@ public class Device extends BluetoothGattCallback {
             readCnt++;
             TelinkLog.d("cur read count: " + readCnt);
             this.sendCommand(cmd);
-            return false;
+            return true;
         }
         return false;
     }

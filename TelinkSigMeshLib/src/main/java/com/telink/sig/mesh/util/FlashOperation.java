@@ -143,7 +143,7 @@ public abstract class FlashOperation {
                 stream.close();
             }
 
-            if (flashData.length > addr) {
+            if (flashData.length > addr && (flashData.length - addr) >= len) {
                 System.arraycopy(buffer, 0, flashData, addr, len);
             }
 
