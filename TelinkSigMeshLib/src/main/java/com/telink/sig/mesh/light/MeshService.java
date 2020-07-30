@@ -25,14 +25,17 @@ import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.Service;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.LocalBroadcastManager;
 
+import com.telink.sig.mesh.MeshManager;
 import com.telink.sig.mesh.R;
 import com.telink.sig.mesh.light.parameter.AutoConnectParameters;
 import com.telink.sig.mesh.light.parameter.KeyBindParameters;
@@ -72,6 +75,7 @@ import static com.telink.sig.mesh.light.Opcode.G_INFO_GET;
 public class MeshService extends Service {
 
     private static final String TAG = "MeshService";
+    private static final String SERVICE_NAME = "com.telink.sig.mesh.light.MeshService";
 
     protected MeshController mMeshController;
 
@@ -88,10 +92,10 @@ public class MeshService extends Service {
     //nvc增加代码--后台服务9.0处理
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel();
-            this.stopForeground(true);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            createNotificationChannel();
+//            this.stopForeground(true);
+//        }
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -102,7 +106,7 @@ public class MeshService extends Service {
         // 通知渠道的id
         String id = "my_channel_01";
         // 用户可以看到的通知渠道的名字.
-        CharSequence name = "Celightling";
+        CharSequence name = "ble";
 //         用户可以看到的通知渠道的描述
         String description = "";
         int importance = NotificationManager.IMPORTANCE_LOW;
@@ -124,12 +128,27 @@ public class MeshService extends Service {
         String CHANNEL_ID = "my_channel_01";
         // Create a notification and set the notification channel.
         Notification notification = new Notification.Builder(this)
-                .setContentTitle("Celightling Running...")
+                .setContentTitle("app Running...")
                 .setContentText("Click to know more or stop the APP.")
                 .setSmallIcon(R.mipmap.ic)
                 .setChannelId(CHANNEL_ID)
                 .build();
         startForeground(1, notification);
+    }
+
+    private static final class MyServiceConnection implements ServiceConnection {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder) {
+            if (binder instanceof MeshServiceBinder) {
+                mThis = ((MeshServiceBinder) binder).getService();
+            }
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mThis = null;
+        }
     }
 
 
@@ -138,7 +157,22 @@ public class MeshService extends Service {
         return null;
     }
 
+    static MyServiceConnection serviceConnection = new MyServiceConnection();
     public static MeshService getInstance() {
+        if (mThis == null) {
+                Intent serviceStartIntent = new Intent();
+                serviceStartIntent.setClassName(MeshManager.mApplication, SERVICE_NAME);
+                Object service = MeshManager.mApplication.startService(serviceStartIntent);
+                if (service == null) {
+//                    IMqttActionListener listener = token.getActionCallback();
+//                    if (listener != null) {
+//                        listener.onFailure(token, new RuntimeException(
+//                                "cannot start service " + SERVICE_NAME));
+//                    }
+                }
+            MeshManager.mApplication.bindService(serviceStartIntent, serviceConnection,
+                    Context.BIND_AUTO_CREATE);
+        }
         return mThis;
     }
 
@@ -162,6 +196,7 @@ public class MeshService extends Service {
     public void onDestroy() {
         super.onDestroy();
         TelinkLog.d(TAG + "-onDestroy");
+        mThis = null;
         onServiceDestroyed();
         if (this.mMeshController != null) {
             this.mMeshController.stop();
