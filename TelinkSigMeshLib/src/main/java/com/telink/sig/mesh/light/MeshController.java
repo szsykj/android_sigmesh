@@ -1518,10 +1518,15 @@ public class MeshController {
 
 //                onOnlineStatusNotify(new byte[]{0x62,0x06, (byte) 0xE6,0x2B,0x5A,0x00,0x00
 //                ,0x00,0x64, (byte) 0xFF, 0x00, 0x00,0x00, 0x00, 0x00, 0x00});
-                meshLib.threadMainProcess();
-                if (mLoopHandler != null) {
-                    mLoopHandler.postDelayed(this, MESH_MAIN_PROCESS_CYCLE);
+                try {
+                    meshLib.threadMainProcess();
+                    if (mLoopHandler != null) {
+                        mLoopHandler.postDelayed(this, MESH_MAIN_PROCESS_CYCLE);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
                 }
+
             }
         }
     };

@@ -122,22 +122,22 @@ public abstract class FlashOperation {
     public synchronized static boolean writeFlash(Context context, byte[] buffer, int addr, int len) {
 //        TelinkLog.e("writeFlash -- buffer capacity:" + buffer.length + " -- addr:" + addr + " -- len:" + len);
         File dir = context.getFilesDir();
-        File targetFile = new File(dir.getAbsolutePath() + File.separator + FILE_NAME);
+        File targetFile = new File(dir.getAbsolutePath() + File.separator + FILE_NAME);//写入目标文件
         byte[] flashData = null;
         FileOutputStream fos;
         try {
 
-            if (!targetFile.exists()|| targetFile.length() == 0) {
+            if (!targetFile.exists()|| targetFile.length() == 0) {//文件不存在
 
-                targetFile.createNewFile();
-                flashData = new byte[DATA_LEN];
+                targetFile.createNewFile();//创建存储文件
+                flashData = new byte[DATA_LEN];//遍历写入ff
                 for (int i = 0; i < flashData.length; i++) {
                     flashData[i] = (byte) 0xFF;
                 }
 
-            } else {
+            } else {//文件存在
                 InputStream stream = new FileInputStream(targetFile);
-                int length = stream.available();
+                int length = stream.available();//读取到flashData中
                 flashData = new byte[length];
                 stream.read(flashData);
                 stream.close();
@@ -153,6 +153,10 @@ public abstract class FlashOperation {
             fos.close();
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ArrayIndexOutOfBoundsException e){
+//            targetFile.deleteOnExit();
+            e.printStackTrace();
         }
 
 //        TelinkLog.e("########## buffer.length: " + buffer.length);
