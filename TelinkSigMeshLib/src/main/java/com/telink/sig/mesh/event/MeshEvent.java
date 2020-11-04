@@ -45,6 +45,9 @@ public class MeshEvent extends Event<String> {
 
     public static final String EVENT_TYPE_DISCONNECTED = "com.telink.sig.mesh.DISCONNECTED";
 
+    public static final String EVENT_TYPE_CONNECTED = "com.telink.sig.mesh.CONNECTED";
+
+
     public static final String EVENT_TYPE_DEVICE_OFFLINE = "com.telink.sig.mesh.EVENT_TYPE_DEVICE_OFFLINE";
 
     // 网络被重新配置

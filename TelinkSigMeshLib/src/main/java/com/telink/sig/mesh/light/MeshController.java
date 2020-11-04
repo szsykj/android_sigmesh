@@ -1041,6 +1041,8 @@ public class MeshController {
         public void onConnected() {
 
             saveLog("onConnected:" + mDevice.getMacAddress());
+            onMeshEvent(MeshEvent.EVENT_TYPE_CONNECTED, "device onConnected");
+
         }
 
         @Override
