@@ -12,7 +12,7 @@
         android:layout_weight="1"
         android:background="@null">
 
-        <android.support.v7.widget.RecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_devices"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -26,7 +26,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
-        android:text="LOG" />
+        android:text="LOG"
+        android:visibility="gone" />
 
     <Button
         android:id="@+id/btn_remote_scan"
@@ -37,12 +38,12 @@
         android:visibility="gone" />
 
     <Button
-        android:id="@+id/btn_back"
+        android:id="@+id/btn_add_all"
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:enabled="false"
-        android:text="Go Back"
+        android:text="ADD ALL"
+        android:visibility="gone"
         android:theme="@style/AccentButton" />
 
 

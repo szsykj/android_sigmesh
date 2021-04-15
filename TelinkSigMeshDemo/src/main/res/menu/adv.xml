@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
    <!-- <item
         android:id="@+id/menu_refresh"
@@ -11,10 +12,11 @@
     <item
         android:id="@+id/menu_refresh"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom|withText" />
+        android:title="refresh"
+        app:showAsAction="ifRoom|withText" />
     <item
         android:id="@+id/menu_state"
         android:orderInCategory="101"
-        android:showAsAction="always"
-        android:title="@string/menu_scan" />
+        android:title="@string/menu_scan"
+        app:showAsAction="always" />
 </menu>
